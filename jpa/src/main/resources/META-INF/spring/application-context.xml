@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.1.xsd">
+
+	<!-- TODO: Adapt base-package attribute to your repository base package (wildcards support) -->
+	<jpa:repositories base-package="com.acme" />
+	
+	<!-- 
+		TODOs:
+		
+		- Adapt packagesToScan attribute to the package your JPA entities reside in
+		- Adapt vendor adapter class in case you're not using Hibernate
+		- Adapt database type on vendor adapter if youre using a non-HSQL database
+	-->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- TODO:  -->  
+		<property name="packagesToScan" value="com.acme" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="database" value="HSQL" />
+				<property name="generateDdl" value="true" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
+	<!-- TODO: Adapt DataSource definition-->
+	<jdbc:embedded-database id="dataSource" type="HSQL" />
+
+</beans>
